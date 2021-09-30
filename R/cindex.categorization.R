@@ -8,7 +8,7 @@ function (x, y) {
 		x <- x[!i]
 		y <- y[!i, ]
 	}
-	k <- survConcordance.fit(y, x)
-	cindex <- (k[1] + k[3]/2)/sum(k[1:3])
+	k <- concordancefit(y, x)$count
+	cindex <- (k[2] + (k[3]+k[4]+k[5])/2)/sum(k[1:5])
 	cindex
 }

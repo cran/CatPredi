@@ -77,7 +77,6 @@ set.seed(123)
   res <- catpredi.survival (formula= Surv(SurvT,SurvS)~1, cat.var="X", cat.points = 2,
    data = dat, method = "addfor", conc.index = "cindex", range = NULL, 
    correct.index = FALSE) 
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

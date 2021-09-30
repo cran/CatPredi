@@ -33,7 +33,7 @@ library(survival)
 set.seed(123)
 
 #Simulate data
-  n = 500
+  n = 300
   tauc = 1
   X <- rnorm(n=n, mean=0, sd=2)
   SurvT <- exp(2*X + rweibull(n = n, shape=1, scale = 1))   + rnorm(n, mean=0, sd=0.25)
@@ -63,7 +63,7 @@ set.seed(123)
   data = dat, method = "addfor", conc.index = "cindex", range = NULL, correct.index = TRUE, 
   control=controlcatpredi.survival(addfor.g=20)) 
   # Select optimal number of cut points
-  comp <-  comp.cutpoints.survival(res.k2, res.k3, V = 3)
+  comp <-  comp.cutpoints.survival(res.k2, res.k3, V = 2)
   }
     
 }

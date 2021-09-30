@@ -1,4 +1,4 @@
-9bd026ab7762f34f0c6723379f082972 *DESCRIPTION
+9698004e12b4e4aa3f548d47a052ace4 *DESCRIPTION
 12296bcda282b2a7e633b7478bb5b5ac *NAMESPACE
 5c3997fd8d8d1aa6e3fd0113be3c304d *R/auc.opt.corrected.R
 15809ff962fd949e753d819aea1db518 *R/bootstrap.sample.R
@@ -7,7 +7,7 @@
 c651f60ea7b18dc7ba21568fbf47f542 *R/calculate.cind.R
 4c5a840f3877c1a620b81b1ef2fd5513 *R/catpredi.R
 fc55123181148ed6cb48b7206fadc333 *R/catpredi.survival.R
-811d85f5ccf581e81fd556c89387e0bd *R/cindex.categorization.R
+715d503927bebe91c98d505e4ae51ad9 *R/cindex.categorization.R
 dbeb7df297e9b76ffc87dff2fa9e032f *R/cindex.opt.corrected.R
 7003eceb5c4a21d5a656a086d8f735b7 *R/comp.cutpoints.R
 22af2126a27e935968d9cd984ac3a0cc *R/comp.cutpoints.survival.R
@@ -34,9 +34,9 @@ a7b596a557abe16187002e4ae29abee6 *R/summary.catpredi.R
 d62cb59ecbb9c50ade74e8d2255ea372 *R/summary.catpredi.survival.R
 c23515065925ff4ad9a763ee4f2b8608 *man/CatPredi-package.Rd
 46cd8e5dd655e9c731893bffe3789d3c *man/catpredi.Rd
-ccf25076856f674ced3c3a65e438ec79 *man/catpredi.survival.Rd
+00046c4cb817a86dd447981ee83aff13 *man/catpredi.survival.Rd
 83ed82afa0d40115c418dbc3bd1cbd0e *man/comp.cutpoints.Rd
-460fc0a815c291730c1791490395f20a *man/comp.cutpoints.survival.Rd
+1e1d27417429e6b405d26353ef1ce8db *man/comp.cutpoints.survival.Rd
 2dd99cd32e8bc94e57789d1f575e3e18 *man/controlcatpredi.Rd
 6f8d4afb3a6c218f38972160b6fe0764 *man/controlcatpredi.survival.Rd
 a0e07a0b3b6e7ae7c851038218bafc0f *man/plot.catpredi.Rd
