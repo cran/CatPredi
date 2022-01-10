@@ -1,6 +1,5 @@
 import(survival)
 import(rms)
-import(CPE)
 import(rgenoud)
 import(mgcv)
 import(stats)
