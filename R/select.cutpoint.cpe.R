@@ -18,9 +18,7 @@ function(formula, cat.var, data , range, point, l.s.points = 100, min.p.cat) {
 				cpe.matrix[i,2] <- NA
 			} else {
 				cpe.matrix[i,1] <- search.points[i]
-				cpe.matrix[i,2] <- coxcpe(fit, data)
-				#cpe.matrix[i,2] <- phcpe(fit, CPE.SE=FALSE, out.ties=FALSE)$CPE
-				  #phcpe2(coef = fit$coefficients, coef.var = fit$var, design = model.matrix(fit, data = data))$CPE 
+				cpe.matrix[i,2] <- phcpe2(coef = fit$coefficients, coef.var = fit$var, design = model.matrix(fit, data = data))$CPE
 			}     		
 		} else {
 			cpe.matrix[i,1] <- search.points[i]

@@ -5,12 +5,12 @@
 Function used to set several parameters to control the selection of the optimal cut points in a Cox proportional hazards regression model
 }
 \usage{
-controlcatpredi.survival(min.p.cat = 5, addfor.g = 100,
+controlcatpredi.survival(min.p.cat = 5, grid = 100,
 B = 50, b.method = c("ncoutcome", "coutcome"), print.gen = 0)
 }
 \arguments{
   \item{min.p.cat}{ Set the minimun number of individuals in each category.}
-  \item{addfor.g}{Grid size for the AddFor algorithm. }
+  \item{grid}{Grid size for the AddFor algorithm. }
   \item{B}{Number of bootstrap replicates for the AUC bias correction procedure}
   \item{b.method}{Allows to specify whether the bootstrap resampling should be done considering or not the outcome variable. 
   The option "ncoutcome" indicates that the data is resampled without taking into account the response variable, while "coutcome" indicates that the data is

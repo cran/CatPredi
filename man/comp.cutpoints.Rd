@@ -21,7 +21,7 @@ This function returns an object of class "comp.cutpoints" with the following com
 \item{icb.auc.diff}{bootstrap based confidence interval for the bias corrected AUC difference.}
 }
 \references{
-I Barrio, I Arostegui, M.X Rodriguez-Alvarez and  J.M Quintana (2015). A new approach to categorising continuous variables in prediction models: proposal and validation. \emph{Statistical Methods in Medical Research} (in press).
+I Barrio, I Arostegui, M.X Rodriguez-Alvarez and  J.M Quintana (2017). A new approach to categorising continuous variables in prediction models: proposal and validation. \emph{Statistical Methods in Medical Research}, 26(6), 2586-2602.
 }
 \author{
 Irantzu Barrio, Maria Xose Rodriguez-Alvarez and Inmaculada Arostegui
@@ -47,26 +47,26 @@ set.seed(127)
   df <- data.frame(y = y, x = x)
 \dontshow{   
   # Select 2 optimal cut points using the AddFor algorithm. Correct the AUC
-  res.addfor.k2 <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 2, 
-  data = df, method = "addfor", range=NULL, correct.AUC=TRUE, 
-  control=controlcatpredi(addfor.g=20))
+  res.backaddfor.k2 <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 2, 
+  data = df, method = "backaddfor", range=NULL, correct.AUC=TRUE, 
+  control=controlcatpredi(grid=20))
   # Select 3 optimal cut points using the AddFor algorithm. Correct the AUC
-  res.addfor.k3 <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 3, 
-  data = df, method = "addfor", range=NULL, correct.AUC=TRUE, 
-  control=controlcatpredi(addfor.g=20))
-  comp <-  comp.cutpoints(res.addfor.k2, res.addfor.k3, V = 10)
+  res.backaddfor.k3 <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 3, 
+  data = df, method = "backaddfor", range=NULL, correct.AUC=TRUE, 
+  control=controlcatpredi(grid=20))
+  comp <-  comp.cutpoints(res.backaddfor.k2, res.backaddfor.k3, V = 10)
 }
 \donttest{ 
   # Select 2 optimal cut points using the AddFor algorithm. Correct the AUC
-  res.addfor.k2 <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 2, 
-  data = df, method = "addfor", range=NULL, correct.AUC=TRUE, 
-  control=controlcatpredi(addfor.g=100))
+  res.backaddfor.k2 <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 2, 
+  data = df, method = "backaddfor", range=NULL, correct.AUC=TRUE, 
+  control=controlcatpredi(grid=100))
   # Select 3 optimal cut points using the AddFor algorithm. Correct the AUC
-  res.addfor.k3 <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 3, 
-  data = df, method = "addfor", range=NULL, correct.AUC=TRUE, 
-  control=controlcatpredi(addfor.g=100))     
+  res.backaddfor.k3 <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 3, 
+  data = df, method = "backaddfor", range=NULL, correct.AUC=TRUE, 
+  control=controlcatpredi(grid=100))     
   # Select optimal number of cut points
-  comp <-  comp.cutpoints(res.addfor.k2, res.addfor.k3, V = 100)
+  comp <-  comp.cutpoints(res.backaddfor.k2, res.backaddfor.k3, V = 100)
 }}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

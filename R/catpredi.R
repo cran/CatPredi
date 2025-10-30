@@ -1,5 +1,5 @@
 catpredi <-
-function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"), range = NULL, correct.AUC = TRUE ,control = controlcatpredi(), ...) {
+function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic","backaddfor"), range = NULL, correct.AUC = FALSE, control = controlcatpredi(), ...) {
 	control <- do.call("controlcatpredi", control)
 
 	if(missing(formula)) {
@@ -26,7 +26,7 @@ function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"),
 	}
 	# Call the methods
 	if(method == "addfor") {
-		res <- k.points.max.auc(formula = formula, cat.var = cat.var, data = data.res, range = range, k = cat.points, l.s.points = control$addfor.g, min.p.cat = control$min.p.cat)
+		res <- k.points.max.auc(formula = formula, cat.var = cat.var, data = data.res, range = range, k = cat.points, l.s.points = control$grid, min.p.cat = control$min.p.cat)
 		cutpoints <- res[,1]
 		AUC = res[,2]
 		
@@ -35,11 +35,11 @@ function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"),
 	 	} else {
 			AUC.cor <- NULL
 	 	}  
-	} else {
+	} else if(method == "genetic"){
 		Dim <- matrix(ncol = 2, nrow = cat.points)
 		Dim[,1] = range[1]*1.0
 		Dim[,2] = range[2]*1.0
-		res <- genoud(calculate.AUC, cat.points, max = TRUE, formula = formula, cat.var = cat.var, data.f = data.res, range = range, min.p.cat = control$min.p.cat, Domains = Dim, print.level = control$print.gen, ...)
+		res <- rgenoud::genoud(calculate.AUC, cat.points, max = TRUE, formula = formula, cat.var = cat.var, data.f = data.res, range = range, min.p.cat = control$min.p.cat, Domains = Dim, print.level = control$print.gen, ...)
 		cutpoints <- res$par
 		AUC = res$value
 		  
@@ -48,17 +48,31 @@ function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"),
 		} else {
 			AUC.cor <- NULL
 		}
+	} else { # method == "backaddfor"
+	  res <- backaddfor(formula = formula, cat.var = cat.var, data = data.res, range = range, k = cat.points, l.s.points = control$grid, min.p.cat = control$min.p.cat, eps = control$eps, repmax = control$B, ...)
+	  cutpoints <- res$cuts
+	  AUC = res$auc
+	  
+	  if(correct.AUC == TRUE) {
+	    AUC.cor <- auc.opt.corrected(formula = formula, cat.var = cat.var, data = data.res , c.points = cutpoints, AUC = AUC, B=control$B , b.method = control$b.method)	
+	  } else {
+	    AUC.cor <- NULL
+	  }  
 	}  
 	# Create the categorical covariate
-	data[,paste(cat.var,"_CatPredi")] <- cut(data[,cat.var], sort(unique(c(max(data[,cat.var], na.rm=TRUE), min(data[,cat.var], na.rm=TRUE), cutpoints))), include.lowest = TRUE, right = TRUE)
-	results <- if(method == "addfor" & correct.AUC == TRUE ) {
-				list(cutpoints = cutpoints, AUC = AUC, AUC.cor = AUC.cor,  grid = control$addfor.g)
-			} else if(method == "genetic" & correct.AUC == TRUE ) {
-				list(cutpoints = cutpoints, AUC = AUC , AUC.cor = AUC.cor)
-			} else if(method == "addfor" & correct.AUC == FALSE ) {
-				list(cutpoints = cutpoints, AUC = AUC , grid = control$addfor.g)
-			} else {
-				list(cutpoints = cutpoints, AUC = AUC)
+	data[,paste0(cat.var,"_CatPredi")] <- cut(data[,cat.var], sort(unique(c(max(data[,cat.var], na.rm=TRUE), min(data[,cat.var], na.rm=TRUE), cutpoints))), include.lowest = TRUE, right = TRUE)
+	results <- if(method == "addfor" & correct.AUC == TRUE) {
+				list(cutpoints = cutpoints, AUC = AUC, AUC.cor = AUC.cor,  grid = control$grid)
+			} else if(method == "genetic" & correct.AUC == TRUE) {
+				list(cutpoints = cutpoints, AUC = AUC, AUC.cor = AUC.cor)
+			} else if(method == "backaddfor" & correct.AUC == TRUE){
+			  list(cutpoints = cutpoints, AUC = AUC, AUC.cor = AUC.cor,  grid = control$grid )
+			} else if(method == "addfor" & correct.AUC == FALSE) {
+				list(cutpoints = cutpoints, AUC = AUC, grid = control$grid)
+			} else if(method == "genetic" & correct.AUC == FALSE){
+			  list(cutpoints = cutpoints, AUC = AUC)
+			} else{ # method == "backaddfor" & correct.AUC == FALSE 
+			  list(cutpoints = cutpoints, AUC = AUC, grid = control$grid)
 			}
 		
 	res <- list(call = match.call(), method = method, formula = formula, cat.var = cat.var, data = data, correct.AUC = correct.AUC, results = results , control = control)

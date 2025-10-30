@@ -5,7 +5,8 @@ function(x, digits = 4, ...) {
 	cat("\n\n*************************************************\n")
 	method <- switch(x$method,
 	"addfor" = cat("Addfor Search Algorithm"),
-	"genetic" = cat("Genetic Search Algorithm"))
+	"genetic" = cat("Genetic Search Algorithm"),
+	"backaddfor" = cat("Backaddfor Search Algorithm"))
 	conc.index <- switch(x$conc.index,
 	"cindex" = cat("Concordance C-index"),
 	"cpe" = cat("Concordance Probability Estimator - CPE"))

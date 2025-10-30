@@ -20,7 +20,9 @@ Additionally, the optimal cut points obtained with the catpredi() function are d
 This function returns the plot of the relationship between the predictor variable and the outcome.
 }
 \references{
-I Barrio, I Arostegui, M.X Rodriguez-Alvarez and  J.M Quintana (2015). A new approach to categorising continuous variables in prediction models: proposal and validation. \emph{Statistical Methods in Medical Research} (in press).
+I Barrio, I Arostegui, M.X Rodriguez-Alvarez and  J.M Quintana (2017). A new approach to categorising continuous variables in prediction models: proposal and validation. \emph{Statistical Methods in Medical Research}, 26(6), 2586-2602.
+
+I Barrio, J Roca-Pardinas and I Arostegui (2021). Selecting the number of categories of the lymph node ratio in cancer research: A bootstrap-based hypothesis test. \emph{Statistical Methods in Medical Research}, 30(3), 926-940.
 }
 \author{
 Irantzu Barrio, Maria Xose Rodriguez-Alvarez and Inmaculada Arostegui
@@ -33,6 +35,7 @@ See Also as \code{\link{catpredi}}.
 }
 \examples{
   library(CatPredi)
+  \donttest{
   set.seed(127)
   #Simulate data
   n = 100
@@ -46,10 +49,11 @@ See Also as \code{\link{catpredi}}.
   df <- data.frame(y = y, x = x)
   
   # Select optimal cut points using the AddFor algorithm
-  res.addfor <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 3, 
-  				data = df, method = "addfor", range = NULL, correct.AUC = FALSE)
+  res.backaddfor <- catpredi(formula = y ~ 1, cat.var = "x", cat.points = 3, 
+  				data = df, method = "backaddfor", range = NULL, correct.AUC = FALSE)
   # Plot
-  plot(res.addfor)
+  plot(res.backaddfor)
+  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

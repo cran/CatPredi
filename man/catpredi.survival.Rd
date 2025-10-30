@@ -4,12 +4,12 @@
 \description{Returns an object with the optimal cut points to categorise a continuous predictor variable in a Cox proportional hazards regression model}
 \usage{
 catpredi.survival(formula, cat.var, cat.points = 1, data, 
-method = c("addfor", "genetic"), conc.index = c("cindex", "cpe"),
-range = NULL, correct.index = TRUE, control = controlcatpredi.survival(), ...)
+method = c("addfor", "genetic", "backaddfor"), conc.index = c("cindex", "cpe"),
+range = NULL, correct.index = FALSE, control = controlcatpredi.survival(), ...)
 }
 \arguments{
   \item{formula}{An object of class \code{\link{formula}} giving the model to be fitted in addition to the continuous covariate
-  is aimed to categorise. The response must be a survival object as returned by the \code{\link{Surv}} function. This argument allows the user to specify whether the continuous predictor should be categorised in a univariable context, or in presence of other covariates or cofounders, i.e in
+  is aimed to categorise. The response must be a survival object as returned by the \link[survival]{Surv} function. This argument allows the user to specify whether the continuous predictor should be categorised in a univariable context, or in presence of other covariates or cofounders, i.e in
   a multiple Cox proportional hazards regression model. For instance, Surv(SurvT,SurvS)~1 indicates that the categorisation should be done
   in a univariable setting.}
   \item{cat.var}{Name of the continuous variable to categorise.}
@@ -55,7 +55,8 @@ Irantzu Barrio and Maria Xose Rodriguez-Alvarez
 }
 
 \seealso{
-See Also \code{\link{controlcatpredi.survival}},  \code{\link{comp.cutpoints.survival}}, \code{\link{plot.catpredi.survival}}, \code{\link{catpredi}}.
+See Also \code{\link{controlcatpredi.survival}},  \code{\link{comp.cutpoints.survival}},
+\code{\link{plot.catpredi.survival}}, \code{\link{catpredi}}, \code{\link[survival]{Surv}}.
 }
 \examples{
 library(CatPredi)

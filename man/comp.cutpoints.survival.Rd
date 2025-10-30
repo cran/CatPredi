@@ -57,11 +57,11 @@ set.seed(123)
   # Select 2 optimal cut points using the AddFor algorithm. Correct the c-index
   res.k2 <- catpredi.survival (formula= Surv(SurvT,SurvS)~1, cat.var="X", cat.points = 1, 
   data = dat, method = "addfor", conc.index = "cindex", range = NULL, correct.index = TRUE, 
-  control=controlcatpredi.survival(addfor.g=20)) 
+  control=controlcatpredi.survival(grid=20)) 
   # Select 3 optimal cut points using the AddFor algorithm. Correct the c-index
   res.k3 <- catpredi.survival (formula= Surv(SurvT,SurvS)~1, cat.var="X", cat.points = 2, 
   data = dat, method = "addfor", conc.index = "cindex", range = NULL, correct.index = TRUE, 
-  control=controlcatpredi.survival(addfor.g=20)) 
+  control=controlcatpredi.survival(grid=20)) 
   # Select optimal number of cut points
   comp <-  comp.cutpoints.survival(res.k2, res.k3, V = 2)
   }

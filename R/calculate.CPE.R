@@ -13,9 +13,8 @@ function(point, formula, cat.var, data.f, range, min.p.cat ) {
 			if("try-error" %in% class(fit)) {
 				cpe <- NA
 			} else {
-				cpe <- coxcpe(fit, data.f)
-				#phcpe(fit, CPE.SE=FALSE, out.ties=FALSE)$CPE      
-				#phcpe2(coef = fit$coefficients, coef.var = fit$var, design = model.matrix(fit, data = data.f))$CPE 
+			  # cpe <- coxcpe(fit, data.f)
+				cpe <- phcpe2(coef = fit$coefficients, coef.var = fit$var, design = model.matrix(fit, data = data.f))$CPE
 			}
 		} else {
 			cpe <- NA

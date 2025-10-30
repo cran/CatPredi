@@ -1,5 +1,5 @@
 catpredi.survival <-
-function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"), conc.index = c("cindex","cpe"), range = NULL, correct.index = TRUE ,control = controlcatpredi.survival(), ...) {
+function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic","backaddfor"), conc.index = c("cindex","cpe"), range = NULL, correct.index = FALSE, control = controlcatpredi.survival(), ...) {
 	control <- do.call("controlcatpredi.survival", control)
 
 	if(missing(formula)) {
@@ -31,7 +31,7 @@ function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"),
 	}
 	# Call the methods
 	if(method == "addfor" & conc.index == "cindex") {
-		res <- k.points.max.cind(formula = formula, cat.var = cat.var, data = data.res, range = range, k = cat.points, l.s.points = control$addfor.g, min.p.cat = control$min.p.cat)
+		res <- k.points.max.cind(formula = formula, cat.var = cat.var, data = data.res, range = range, k = cat.points, l.s.points = control$grid, min.p.cat = control$min.p.cat)
 		cutpoints <- res[,1]
 		Cindex = res[,2]
 		# Correct the C-index  
@@ -41,7 +41,7 @@ function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"),
 			Cindex.cor <- NULL
 		}
 	} else if(method == "addfor" & conc.index == "cpe") {  
-		res <- k.points.max.cpe(formula = formula, cat.var = cat.var, data = data.res, range = range, k = cat.points, l.s.points = control$addfor.g, min.p.cat = control$min.p.cat)
+		res <- k.points.max.cpe(formula = formula, cat.var = cat.var, data = data.res, range = range, k = cat.points, l.s.points = control$grid, min.p.cat = control$min.p.cat)
 		cutpoints <- res[,1]
 		CPE = res[,2]
 		# Correct the CPE 
@@ -54,7 +54,7 @@ function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"),
 		Dim <- matrix(ncol = 2, nrow = cat.points)
 		Dim[,1] = range[1]*1.0
 		Dim[,2] = range[2]*1.0
-		res <- genoud(calculate.cind, cat.points, max = TRUE, formula = formula, cat.var = cat.var, data.f = data.res, range = range, min.p.cat = control$min.p.cat, Domains = Dim, print.level = control$print.gen, ...)
+		res <- rgenoud::genoud(calculate.cind, cat.points, max = TRUE, formula = formula, cat.var = cat.var, data.f = data.res, range = range, min.p.cat = control$min.p.cat, Domains = Dim, print.level = control$print.gen, ...)
 		cutpoints <- res$par
 		Cindex = res$value
 		# Correct the C-index   
@@ -63,11 +63,11 @@ function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"),
 		} else {
 			Cindex.cor <- NULL
 		}  
-	} else {
+	} else if(method == "genetic" & conc.index == "cpe"){
 		Dim <- matrix(ncol = 2, nrow = cat.points)
 		Dim[,1] = range[1]*1.0
 		Dim[,2] = range[2]*1.0
-		res <- genoud(calculate.CPE, cat.points, max = TRUE, formula = formula, cat.var = cat.var, data.f = data.res, range = range, min.p.cat = control$min.p.cat, Domains = Dim, print.level = control$print.gen, ...)
+		res <- rgenoud::genoud(calculate.CPE, cat.points, max = TRUE, formula = formula, cat.var = cat.var, data.f = data.res, range = range, min.p.cat = control$min.p.cat, Domains = Dim, print.level = control$print.gen, ...)
 		cutpoints <- res$par
 		CPE = res$value
 		# Correct the CPE   
@@ -76,25 +76,61 @@ function(formula, cat.var, cat.points = 1, data, method = c("addfor","genetic"),
 		} else {
 			CPE.cor <- NULL
 		}
-	} 
+	}  else if(method == "backaddfor" & conc.index == "cindex") { 
+	  Dim <- matrix(ncol = 2, nrow = cat.points)
+	  Dim[,1] = range[1]*1.0
+	  Dim[,2] = range[2]*1.0
+	  res <- backaddfor.cind(formula = formula, cat.var = cat.var, data = data.res, range = range, k = cat.points, l.s.points = control$grid, min.p.cat = control$min.p.cat, eps = control$eps, repmax = control$B)
+	  # res <- rgenoud::genoud(calculate.cind, cat.points, max = TRUE, formula = formula, cat.var = cat.var, data.f = data.res, range = range, min.p.cat = control$min.p.cat, Domains = Dim, print.level = control$print.gen, ...)
+	  cutpoints <- res$cuts
+	  Cindex = res$cind 
+	  # Correct the C-index   
+	  if(correct.index == TRUE) {
+	    Cindex.cor <- cindex.opt.corrected(formula = formula, cat.var =  cat.var , data = data.res , c.points = cutpoints , cindex = Cindex , B=control$B, b.method = control$b.method) 	
+	  } else {
+	    Cindex.cor <- NULL
+	  }  
+	} else { #if(method == "backaddfor" & conc.index == "cpe"){
+	  Dim <- matrix(ncol = 2, nrow = cat.points)
+	  Dim[,1] = range[1]*1.0
+	  Dim[,2] = range[2]*1.0
+	  res <- backaddfor(formula = formula, cat.var = cat.var, data = data.res, range = range, k = cat.points, l.s.points = control$grid, min.p.cat = control$min.p.cat, eps = control$eps, repmax = control$B, ...)
+	  # res <- rgenoud::genoud(calculate.CPE, cat.points, max = TRUE, formula = formula, cat.var = cat.var, data.f = data.res, range = range, min.p.cat = control$min.p.cat, Domains = Dim, print.level = control$print.gen, ...)
+	  cutpoints <- res$cuts
+	  CPE = res$auc
+	  # Correct the CPE   
+	  if(correct.index == TRUE) {
+	    CPE.cor <- cpe.opt.corrected(formula = formula, cat.var =  cat.var , data = data.res , c.points = cutpoints , cpe = CPE , B=control$B , b.method = control$b.method) 	
+	  } else {
+	    CPE.cor <- NULL
+	  }
+	}
 	# Create the categorical covariate
-	data[,paste(cat.var,"_CatPredi")] <- cut(data[,cat.var], sort(unique(c(max(data[,cat.var]), min(data[,cat.var]), cutpoints))), include.lowest = TRUE, right = TRUE)
+	data[,paste0(cat.var,"_CatPredi")] <- cut(data[,cat.var], sort(unique(c(max(data[,cat.var]), min(data[,cat.var]), cutpoints))), include.lowest = TRUE, right = TRUE)
 	results <- if(method == "addfor" & conc.index == "cindex" & correct.index == TRUE ) {
-					list(cutpoints = cutpoints, Cindex = Cindex, Cindex.cor = Cindex.cor,  grid = control$addfor.g)
+					list(cutpoints = cutpoints, Cindex = Cindex, Cindex.cor = Cindex.cor,  grid = control$grid)
 				} else if(method == "addfor" & conc.index == "cpe" & correct.index == TRUE) {
-					list(cutpoints = cutpoints, CPE = CPE, CPE.cor = CPE.cor,  grid = control$addfor.g)
+					list(cutpoints = cutpoints, CPE = CPE, CPE.cor = CPE.cor,  grid = control$grid)
 				} else if(method == "genetic" & conc.index == "cindex" & correct.index == TRUE) { 
 					list(cutpoints = cutpoints, Cindex = Cindex, Cindex.cor = Cindex.cor)
 				} else if(method == "genetic" & conc.index == "cpe" & correct.index == TRUE) {
 					list(cutpoints = cutpoints, CPE = CPE, CPE.cor = CPE.cor)
-				} else if(method == "addfor" & conc.index == "cindex" & correct.index == FALSE ) {
-					list(cutpoints = cutpoints, Cindex = Cindex, grid = control$addfor.g)
+				} else if(method == "backaddfor" & conc.index == "cindex" & correct.index == TRUE) { 
+				  list(cutpoints = cutpoints, Cindex = Cindex, Cindex.cor = Cindex.cor)
+				} else if(method == "backaddfor" & conc.index == "cpe" & correct.index == TRUE) {
+				  list(cutpoints = cutpoints, CPE = CPE, CPE.cor = CPE.cor)
+				}else if(method == "addfor" & conc.index == "cindex" & correct.index == FALSE ) {
+					list(cutpoints = cutpoints, Cindex = Cindex, grid = control$grid)
 				} else if(method == "addfor" & conc.index == "cpe" & correct.index == FALSE) {
-					list(cutpoints = cutpoints, CPE = CPE, grid = control$addfor.g)
+					list(cutpoints = cutpoints, CPE = CPE, grid = control$grid)
 				} else if(method == "genetic" & conc.index == "cindex" & correct.index == FALSE) { 
 					list(cutpoints = cutpoints, Cindex = Cindex)
-				} else { #method == "genetic" & conc.index == "cpe" & correct.index == FALSE)
+				} else if (method == "genetic" & conc.index == "cpe" & correct.index == FALSE){
 					list(cutpoints = cutpoints, CPE = CPE)
+				} else if(method == "backaddfor" & conc.index == "cindex" & correct.index == FALSE) { 
+				  list(cutpoints = cutpoints, Cindex = Cindex)
+				} else { #if (method == "backaddfor" & conc.index == "cpe" & correct.index == FALSE){
+				  list(cutpoints = cutpoints, CPE = CPE)
 				}		
 	res <- list(call = match.call(), method = method, conc.index = conc.index, formula = formula, cat.var = cat.var, data = data, correct.index = correct.index, results = results, control =  control)
 	class(res) <- "catpredi.survival"

@@ -62,8 +62,7 @@ function(obj1,obj2, V=100) {
 			data.b[,"x.cut1"] <- x.cut
 			formula.n <- update(formula, as.formula("~ . + x.cut1"))
 			fit.1 <- cph(formula.n, data=data.b)
-			cpe.fit1 <- coxcpe(fit.1, data.b)
-			 #phcpe2(coef = fit.1$coefficients, coef.var = fit.1$var, design = model.matrix(fit.1, data = data.b))$CPE #phcpe(fit.1,CPE.SE=FALSE, out.ties=FALSE)$CPE
+			cpe.fit1 <- phcpe2(coef = fit.1$coefficients, coef.var = fit.1$var, design = model.matrix(fit.1, data = data.b))$CPE #phcpe(fit.1,CPE.SE=FALSE, out.ties=FALSE)$CPE
 			ci.b.1[i] <- cpe.opt.corrected(formula = formula, cat.var =  cat.var , data = data.b , c.points = point1 , cpe = cpe.fit1 , B = B1 , b.method = b.method)  
 				
 			# k = k+1
@@ -73,8 +72,8 @@ function(obj1,obj2, V=100) {
 			formula.n <- update(formula, as.formula("~ . + x.cut2"))
 			
 			fit.2 <- cph(formula.n, data=data.b)
-			cpe.fit2 <- coxcpe(fit.2, data.b)
-			  #phcpe2(coef = fit.2$coefficients, coef.var = fit.2$var, design = model.matrix(fit.2, data = data.b))$CPE #phcpe(fit.2,CPE.SE=FALSE, out.ties=FALSE)$CPE
+			# cpe.fit2 <- coxcpe(fit.2, data.b)
+			cpe.fit2 <- phcpe2(coef = fit.2$coefficients, coef.var = fit.2$var, design = model.matrix(fit.2, data = data.b))$CPE #phcpe(fit.2,CPE.SE=FALSE, out.ties=FALSE)$CPE
 			ci.b.2[i] <- cpe.opt.corrected(formula = formula, cat.var =  cat.var , data = data.b , c.points = point2 , cpe = cpe.fit2 , B = B2, b.method = b.method)  
 	
 			ci.b.diff[i] <- ci.b.2[i] - ci.b.1[i]

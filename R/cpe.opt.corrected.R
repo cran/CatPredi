@@ -22,12 +22,12 @@ function(formula, cat.var, data, c.points, cpe , B , b.method = c("ncoutcome","c
 				cpe.boot[i] <- NA
 				cpe.original[i] <- NA
 			} else {
-				cpe.boot[i] <- cpe(f.boot, data.b)
-				  #phcpe2(coef = f.boot$coefficients, coef.var = f.boot$var, design = model.matrix(f.boot, data = data.b))$CPE  #phcpe(f.boot,CPE.SE=FALSE, out.ties=FALSE)$CPE 
+				# cpe.boot[i] <- cpe(f.boot, data.b)
+			  cpe.boot[i] <- phcpe2(coef = f.boot$coefficients, coef.var = f.boot$var, design = model.matrix(f.boot, data = data.b))$CPE  #phcpe(f.boot,CPE.SE=FALSE, out.ties=FALSE)$CPE
 				
 				# Original Sample 
-				cpe.original[i] <- cpe(f.boot, data.o)
-				  #phcpe2(coef = f.boot$coefficients, coef.var = f.boot$var, design = model.matrix(f.boot, data = data.o))$CPE 
+				# cpe.original[i] <- cpe(f.boot, data.o)
+			  cpe.original[i] <- phcpe2(coef = f.boot$coefficients, coef.var = f.boot$var, design = model.matrix(f.boot, data = data.o))$CPE
 			}
 		} else {
 			cpe.boot[i] <- NA

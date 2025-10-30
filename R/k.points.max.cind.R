@@ -1,5 +1,6 @@
 k.points.max.cind <-
 function(formula, cat.var, data, range, k, l.s.points = 100 , min.p.cat=1) {
+
 	point=NULL
 	mat=matrix(ncol=2,nrow=k)
 	colnames(mat)<- c("point","c-index")

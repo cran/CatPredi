@@ -6,7 +6,8 @@ function(x, digits = 4, ...) {
 	cat("\n*************************************************\n")
 	method <- switch(x$method,
 	"addfor" = cat("Addfor Search Algorithm"),
-	"genetic" = cat("Genetic Search Algorithm"))
+	"genetic" = cat("Genetic Search Algorithm"),
+	"backaddfor" = cat("Backaddfor Search Algorithm"))
 	cat("\n*************************************************\n")
 	cat("\n*************************************************\n\n")
   if(x$method == "addfor") {
@@ -24,7 +25,7 @@ function(x, digits = 4, ...) {
 		dimnames(p.table) <- list(rep("", l = length(x$results$AUC)), c("Optimal cutpoints", "Optimal AUC"))
 		print(p.table, quote = FALSE, justify = "right")
 	} 
-	} else {
+	} else { # Genetic/Backaddfor
 		
 	if(x$correct.AUC == TRUE){
 	cutpoints <- cbind(format(sort(x$results$cutpoints), digits = digits, justify = "right"))
