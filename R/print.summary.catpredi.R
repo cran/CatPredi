@@ -1,3 +1,4 @@
+#' @export
 print.summary.catpredi <-
 function(x, ...) {
   print.catpredi(x, digits = x$digits)
@@ -15,19 +16,19 @@ function(x, ...) {
       else print(tpm$formula)
       if (length(tpm$p.coeff) > 0) {
           cat("\nParametric coefficients:\n")
-          printCoefmat(tpm$p.table, digits = digits, signif.stars = signif.stars,
+          stats::printCoefmat(tpm$p.table, digits = digits, signif.stars = signif.stars,
               na.print = "NA", ...)
       }
       cat("\n")
       if (tpm$m > 0) {
           cat("Approximate significance of smooth terms:\n")
-          printCoefmat(tpm$s.table, digits = digits, signif.stars = signif.stars,
+          stats::printCoefmat(tpm$s.table, digits = digits, signif.stars = signif.stars,
               has.Pvalue = TRUE, na.print = "NA", cs.ind = 1, ...)
       }
       cat("\n")
       if (!is.null(tpm$rank) && tpm$rank < tpm$np)
           cat("Rank: ", tpm$rank, "/", tpm$np, "\n", sep = "")
-      
+
       invisible(tpm)
 
 }

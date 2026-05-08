@@ -1,5 +1,5 @@
 coxcpe <- function(phfit, data) {
-  xbeta <- na.omit(predict(phfit, data, type = "lp"))
+  xbeta <- stats::na.omit(stats::predict(phfit, data, type = "lp"))
   n <- length(xbeta)
   CPE <- 0
   for (i in c(1:(n-1))) {

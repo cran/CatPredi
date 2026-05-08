@@ -16,11 +16,11 @@ function(formula, cat.var, data, range, points, l.s.points = 100, min.p.cat = 1)
 				auc.matrix[i,2] <- compute.empirical.AUC(ratio.s[Y==1], ratio.s[Y==0])
 			} else {
 				data[,"x.cut_"] <- x.cut
-				formula.n <- update(formula, as.formula("~ . + x.cut_"))
-				fit <- gam(formula.n, family = binomial, data = data)
-				auc.matrix[i,2] <- compute.empirical.AUC(fit$fitted[Y==1], fit$fitted[Y==0])  
+				formula.n <- stats::update(formula, stats::as.formula("~ . + x.cut_"))
+				fit <- mgcv::gam(formula.n, family = stats::binomial, data = data)
+				auc.matrix[i,2] <- compute.empirical.AUC(fit$fitted[Y==1], fit$fitted[Y==0])
 			}
-			auc.matrix[i,1] <- search.points[i] 
+			auc.matrix[i,1] <- search.points[i]
 		 } else {
 			auc.matrix[i,2] <- NA
 		 }

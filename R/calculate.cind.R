@@ -7,13 +7,13 @@ function(point, formula, cat.var, data.f, range, min.p.cat) {
 		x.cut <- cut(X, cutoffs, include.lowest=TRUE,right=TRUE)
 		if(length(levels(x.cut)) > 1 & all(table(x.cut)>min.p.cat)) {
 			data.f[,"x.cut_"] <- x.cut
-			formula.n <- update(formula, as.formula("~ . + x.cut_"))
-			fit <- try(cph(formula.n, data = data.f))     
+			formula.n <- stats::update(formula, stats::as.formula("~ . + x.cut_"))
+			fit <- try(rms::cph(formula.n, data = data.f))
 			#if(class(fit) == "try-error"){
 			if("try-error" %in% class(fit)){
 				cind <- NA
 			} else {
-				cind <- cindex.categorization(fit$linear.predictors, Surv(data.f[,var.names[1]], data.f[,var.names[2]]))         
+				cind <- cindex.categorization(fit$linear.predictors, survival::Surv(data.f[,var.names[1]], data.f[,var.names[2]]))
 			}
 		} else {
 			cind <- NA

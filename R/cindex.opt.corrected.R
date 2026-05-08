@@ -10,20 +10,20 @@ function(formula, cat.var, data , c.points, cindex , B ,  b.method = c("ncoutcom
 		sel.point = sort(unique(c(min(X, data.b[,cat.var]), max(X, data.b[,cat.var]), c.points)))
 		x.cut.boot <- cut(data.b[,cat.var], sel.point, include.lowest = TRUE, right = TRUE)
 		x.cut <-  cut(X, sel.point, include.lowest = TRUE, right = TRUE)
-		if(length(levels(x.cut.boot)) == length(levels(x.cut)) & all(table(x.cut.boot)>1)) {		
+		if(length(levels(x.cut.boot)) == length(levels(x.cut)) & all(table(x.cut.boot)>1)) {
 			data.b[,"x.cut_"] <- x.cut.boot
 			data.o[,"x.cut_"] <- x.cut
 			# Bootstrap
-			formula.n <- update(formula, as.formula("~ . + x.cut_"))
-			f.boot <- cph(formula.n, data=data.b)
-			cind.boot[i] <- cindex.categorization(f.boot$linear.predictors, Surv(data.b[,var.names[1]],data.b[,var.names[2]]))
-			# Original Sample 
-			p <- predict(f.boot, newdata = data.o, type = "lp")
-			cind.original[i] <- cindex.categorization(p, Surv(data.o[,var.names[1]],data.o[,var.names[2]]))
+			formula.n <- stats::update(formula, stats::as.formula("~ . + x.cut_"))
+			f.boot <- rms::cph(formula.n, data=data.b)
+			cind.boot[i] <- cindex.categorization(f.boot$linear.predictors, survival::Surv(data.b[,var.names[1]],data.b[,var.names[2]]))
+			# Original Sample
+			p <- stats::predict(f.boot, newdata = data.o, type = "lp")
+			cind.original[i] <- cindex.categorization(p, survival::Surv(data.o[,var.names[1]],data.o[,var.names[2]]))
 		} else {
 			cind.boot[i] <- NA
 			cind.original[i] <- NA
-		}		
+		}
 	}
 	cind.corrected <- cindex - mean(abs(cind.original - cind.boot), na.rm=TRUE)
 	cind.corrected

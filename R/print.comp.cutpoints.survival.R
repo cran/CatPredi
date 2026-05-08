@@ -1,7 +1,8 @@
+#' @export
 print.comp.cutpoints.survival <-
-function(x, digits = 4, ...) { 
+function(x, digits = 4, ...) {
   cat("\nCall:\n")
-	print(x$call)    
+	print(x$call)
 	cat("\n\n*************************************************\n")
   cat("Compare optimal number of cut points")
 	cat("\n*************************************************\n\n")

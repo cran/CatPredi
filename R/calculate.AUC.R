@@ -13,9 +13,9 @@ function(points, formula, cat.var, data.f, range, min.p.cat = 1) {
 				auc <- compute.empirical.AUC(ratio.s[y==1], ratio.s[y==0])
 			} else {
 				 data.f[,"x.cut_"] <- x.cut
-				 formula.n <- update(formula, as.formula("~ . + x.cut_"))				  
-				 fit <- gam(formula.n, family = binomial, data = data.f)
-				 auc <- compute.empirical.AUC(fit$fitted[y==1], fit$fitted[y==0])  
+				 formula.n <- stats::update(formula, stats::as.formula("~ . + x.cut_"))
+				 fit <- mgcv::gam(formula.n, family = stats::binomial, data = data.f)
+				 auc <- compute.empirical.AUC(fit$fitted[y==1], fit$fitted[y==0])
 			}
 		} else {
 			auc <- NA

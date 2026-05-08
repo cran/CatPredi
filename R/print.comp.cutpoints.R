@@ -1,6 +1,7 @@
+#' @export
 print.comp.cutpoints <-
 function(x, digits = 4, ...) {
-	  
+
 	cat("\n\n*************************************************\n")
   cat("Compare optimal number of cut points")
 	cat("\n*************************************************\n\n")
